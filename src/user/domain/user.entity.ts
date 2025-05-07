@@ -25,12 +25,12 @@ type UserProps = UserCreateProps & {
 };
 
 export class User {
-  public readonly user_id: Uuid;
-  public readonly username: string;
+  public user_id: Uuid;
+  public username: string;
   private _btc_balance: Balance;
   private _usd_balance: Balance;
-  public readonly created_at: Date;
-  public readonly updated_at?: Date | null;
+  public created_at: Date;
+  public updated_at?: Date | null;
 
   constructor(props: UserConstructorProps) {
     this.user_id = props.user_id ?? new Uuid();
@@ -48,9 +48,7 @@ export class User {
   }
 
   static reconstitute(props: UserProps): User {
-    const user = new User(props);
-    User.validate(user);
-    return user;
+    return new User(props);
   }
 
   public get btc_balance(): number {
@@ -62,18 +60,22 @@ export class User {
 
   public creditBtc(amount: number): void {
     this._btc_balance = this._btc_balance.credit(amount);
+    this.updated_at = new Date();
   }
 
   public debitBtc(amount: number): void {
     this._btc_balance = this._btc_balance.debit(amount);
+    this.updated_at = new Date();
   }
 
   public creditUsd(amount: number): void {
     this._usd_balance = this._usd_balance.credit(amount);
+    this.updated_at = new Date();
   }
 
   public debitUsd(amount: number): void {
     this._usd_balance = this._usd_balance.debit(amount);
+    this.updated_at = new Date();
   }
 
   static validate(entity: User) {

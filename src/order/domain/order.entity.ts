@@ -66,9 +66,7 @@ export class Order {
   }
 
   static reconstitute(props: OrderProps): Order {
-    const order = new Order(props);
-    Order.validate(order);
-    return order;
+    return new Order(props);
   }
 
   fill(amountToFill: number): void {
@@ -100,9 +98,10 @@ export class Order {
       this.status === StatusOrder.FILLED ||
       this.status === StatusOrder.CANCELLED
     ) {
-      throw new Error('Cannot cancel a completed order');
+      throw new DomainError('Cannot cancel a completed order');
     }
     this.status = StatusOrder.CANCELLED;
+    this.updated_at = new Date();
   }
 
   static validate(entity: Order) {

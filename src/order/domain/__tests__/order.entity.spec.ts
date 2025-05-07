@@ -77,7 +77,6 @@ describe('Order unit test', () => {
       expect(order.status).toBe(StatusOrder.PARTIAL);
       expect(order.created_at).toBe(createdAt);
       expect(order.updated_at).toBe(updatedAt);
-      expect(validateSpy).toHaveBeenCalledTimes(1);
     });
   });
 

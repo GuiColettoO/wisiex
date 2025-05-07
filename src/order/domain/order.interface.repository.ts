@@ -14,3 +14,9 @@ export interface IOrderRepository {
 
   delete(order: Order): Promise<void>;
 }
+
+
+export interface IOrderQueue {
+  enqueue(order: Order): Promise<void>;
+  dequeue(): Promise<Order | null>;
+}

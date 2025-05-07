@@ -10,8 +10,8 @@ export class UserSequelizeRepository implements IUserRepository {
 
   async save(entity: User): Promise<void> {
     try {
-      const modelProps = UserModelMapper.toModel(entity);
-      await this.userModel.create(modelProps.toJSON());
+      const modelProps = UserModelMapper.toModel(entity).toJSON();
+      await this.userModel.upsert(modelProps);
     }catch (err) {
       throw new InfraError('UserRepository.save failed', err);
     }
