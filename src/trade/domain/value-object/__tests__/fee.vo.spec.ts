@@ -4,28 +4,26 @@ import { Fee } from '../fee.vo';
 describe('Fee Value Object Unit Tests', () => {
   test('should create a Fee with zero value', () => {
     const fee = new Fee(0);
-    expect(fee.toPercentage()).toBe(0);
-  });
-
-  test('should create a Fee with positive value', () => {
-    const fee = new Fee(10);
-    expect(fee.toPercentage()).toBe(0.1);
+    expect(fee.value).toBe(0);
   });
 
   test('should throw DomainError when initialized with a negative value', () => {
-    expect(() => new Fee(-5)).toThrow(DomainError);
-    expect(() => new Fee(-5)).toThrow('Fee must not be negative');
+    expect(() => new Fee(-1)).toThrow(DomainError);
+    expect(() => new Fee(-1)).toThrow('Fee must not be negative');
   });
 
-  test('toPercentage: should return value / 100', () => {
-    const fee = new Fee(25);
-    expect(fee.toPercentage()).toBe(0.25);
+  test('fromAmount: should calculate absolute fee from USD amount and rate', () => {
+    const fee = Fee.fromAmount(1000, 0.005);
+    expect(fee.value).toBeCloseTo(5);
   });
 
-  test('calculateOn: should return base * (value / 100)', () => {
-    const fee = new Fee(5);
-    expect(fee.calculateOn(200)).toBe(10);
+  test('makerOn: should apply MAKER_RATE correctly', () => {
+    const fee = Fee.makerOn(1000);
+    expect(fee.value).toBeCloseTo(1000 * Fee.MAKER_RATE);
+  });
 
-    expect(fee.toPercentage()).toBe(0.05);
+  test('takerOn: should apply TAKER_RATE correctly', () => {
+    const fee = Fee.takerOn(2000);
+    expect(fee.value).toBeCloseTo(2000 * Fee.TAKER_RATE);
   });
 });

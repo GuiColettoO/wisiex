@@ -9,9 +9,8 @@ describe('Trade unit test', () => {
         sell_order_id: new Uuid('24810312-b695-45d3-9828-c728b26472e6'),
         price: 10205.75,
         amount: 0.004,
-        makerFee: 0.5,
-        takerFee: 0.3,
       });
+      console.log(trade)
       expect(trade.trade_id).toBeInstanceOf(Uuid);
       expect(trade.buy_order_id.id).toBe(
         '037dc381-9c44-4b09-8801-fba1523c4d4b'
@@ -21,8 +20,8 @@ describe('Trade unit test', () => {
       );
       expect(trade.price.value).toBe(10205.75);
       expect(trade.amount.value).toBe(0.004);
-      expect(trade.makerFee.value).toBe(0.5);
-      expect(trade.takerFee.value).toBe(0.3);
+      expect(trade.makerFee.value).toBe(0.2);
+      expect(trade.takerFee.value).toBe(0.12);
     });
   });
 
@@ -33,8 +32,6 @@ describe('Trade unit test', () => {
         sell_order_id: new Uuid('24810312-b695-45d3-9828-c728b26472e6'),
         price: 10205.75,
         amount: 0.004,
-        makerFee: 0.5,
-        takerFee: 0.3,
       });
       expect(trade.trade_id).toBeInstanceOf(Uuid);
       expect(trade.buy_order_id.id).toBe(
@@ -45,8 +42,8 @@ describe('Trade unit test', () => {
       );
       expect(trade.price.value).toBe(10205.75);
       expect(trade.amount.value).toBe(0.004);
-      expect(trade.makerFee.value).toBe(0.5);
-      expect(trade.takerFee.value).toBe(0.3);
+      expect(trade.makerFee.value).toBe(0.20);
+      expect(trade.takerFee.value).toBe(0.12);
     });
   });
 
@@ -64,8 +61,6 @@ describe('Trade unit test', () => {
         sell_order_id: new Uuid('24810312-b695-45d3-9828-c728b26472e6'),
         price: 10205.75,
         amount: 0.004,
-        makerFee: 0.5,
-        takerFee: 0.3,
       });
 
       expect(trade.trade_id).toBeInstanceOf(Uuid);

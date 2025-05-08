@@ -99,7 +99,6 @@ describe('PlaceOrderUseCase Integration Tests', () => {
     const makerUser = await userRepo.findById(new Uuid(makerId));
     expect(makerUser!.btc_balance).toBeCloseTo(999.5);
     expect(makerUser!.usd_balance).toBe(5000);
-
     const buffer = orderQueue.getBuffer();
     expect(buffer).toHaveLength(1);
     expect(buffer[0].order_id.id).toBe(result.order_id);

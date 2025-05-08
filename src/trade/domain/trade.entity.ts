@@ -10,8 +10,8 @@ type TradeConstructorProps = {
   sell_order_id: Uuid;
   price: number;
   amount: number;
-  makerFee: number;
-  takerFee: number;
+  makerFee?: number;
+  takerFee?: number;
   executed_at?: Date;
 };
 
@@ -20,8 +20,8 @@ type TradeCreateProps = {
   sell_order_id: Uuid;
   price: number;
   amount: number;
-  makerFee: number;
-  takerFee: number;
+  makerFee?: number;
+  takerFee?: number;
 };
 
 type TradeProps = TradeCreateProps & {
@@ -45,13 +45,20 @@ export class Trade {
     this.sell_order_id = props.sell_order_id;
     this.price = new Price(props.price);
     this.amount = new Quantity(props.amount);
-    this.makerFee = new Fee(props.makerFee);
-    this.takerFee = new Fee(props.takerFee);
+    this.makerFee = Fee.makerOn(props.price * props.amount);
+    this.takerFee = Fee.takerOn(props.price * props.amount);
     this.executed_at = props.executed_at ?? new Date();
   }
 
   static create(props: TradeCreateProps): Trade {
-    return new Trade(props);
+    const usdTraded = props.price * props.amount;
+    const makerFee = Fee.makerOn(usdTraded).value;
+    const takerFee = Fee.takerOn(usdTraded).value;
+    return new Trade({
+      ...props,
+      makerFee,
+      takerFee,
+    });
   }
 
   static reconstitute(props: TradeProps): Trade {
