@@ -110,7 +110,7 @@ export function createSocketServer(httpServer: HttpServer) {
     });
 
     socket.on('disconnect', () => {
-      console.log(`❌ Socket desconectou: ${socket.id}`);
+      console.log(`Socket desconectou: ${socket.id}`);
     });
   });
 

@@ -13,6 +13,7 @@ import { UserModel } from './user/infra/user.model';
 import { OrderModel } from './order/infra/order.model';
 import { TradeModel } from './trade/infra/trade.model';
 import { MatchOrdersDaemon } from './order/application/match-orders/match-orders.daemon';
+import { SignInUseCase } from './user/application/authentication.use-case';
 
 dotenv.config();
 
@@ -28,6 +29,7 @@ async function bootstrap() {
     const orderRepo = new OrderSequelizeRepository(OrderModel);
     const tradeRepo = new TradeSequelizeRepository(TradeModel);
     const orderQueue = new RedisOrderQueue(REDIS_URL);
+    const signInUC = new SignInUseCase(userRepo);
 
     const matchDaemon = new MatchOrdersDaemon(
       orderQueue,
@@ -40,11 +42,17 @@ async function bootstrap() {
     const app = express();
     app.use(express.json());
 
-    const server = http.createServer(app);
-
-    const io = new SocketIOServer(server, {
-      cors: { origin: '*' },
+    app.post('/signin', async (req, res) => {
+      const { username } = req.body;
+      try {
+        const { access_token } = await signInUC.execute({ username });
+        res.json({ access_token });
+      } catch (err: any) {
+        res.status(400).json({ error: err.message });
+      }
     });
+
+    const server = http.createServer(app);
 
     createSocketServer(server);
 
